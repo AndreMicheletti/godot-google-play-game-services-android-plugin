@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.PlayGames
+import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import com.jacobibanez.godot.gpgs.PLUGIN_NAME
+import com.jacobibanez.godot.gpgs.loadScoreSuccess
+import com.jacobibanez.godot.gpgs.loadScoreFailure
 import com.jacobibanez.godot.gpgs.submitScoreFailure
 import com.jacobibanez.godot.gpgs.submitScoreSuccess
 import org.godotengine.godot.Godot
@@ -21,6 +24,29 @@ class LeaderboardsProxy(
     private val showLeaderboardRequestCode = 9003
     private val showLeaderboardForTimeSpanRequestCode = 9004
     private val showLeaderboardForTimeSpanAndCollectionRequestCode = 9005
+
+    fun loadPlayerScorePublic(leaderboardId: String, timeSpan: Int) {
+        Log.d(
+            tag,
+            "loadPlayerScorePublic $leaderboardId for time span ${getTimeSpan(timeSpan)}"
+        )
+        leaderboardsClient.loadCurrentPlayerLeaderboardScore(leaderboardId, timeSpan, LeaderboardVariant.COLLECTION_PUBLIC)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(tag,  "loadPlayerScorePublic success")
+                    val displayRank = task.getResult().get()?.displayRank
+                    val displayScore = task.getResult().get()?.displayScore
+                    GodotPlugin.emitSignal(godot, PLUGIN_NAME, loadScoreSuccess, displayRank, displayScore)
+                } else {
+                    Log.e(
+                        tag,
+                        "Error loadPlayerScorePublic. Cause: ${task.exception}",
+                        task.exception
+                    )
+                    GodotPlugin.emitSignal(godot, PLUGIN_NAME, loadScoreFailure)
+                }
+            }
+    }
 
     fun showAllLeaderboards() {
         Log.d(tag, "Showing all leaderboards")

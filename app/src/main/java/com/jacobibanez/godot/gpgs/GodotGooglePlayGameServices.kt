@@ -71,6 +71,10 @@ class GodotGooglePlayGameServices(
     fun showAllLeaderboards() = leaderboardsProxy.showAllLeaderboards()
 
     @UsedByGodot
+    fun loadPlayerScorePublic(leaderboardId: String, timeSpan: Int) =
+        leaderboardsProxy.loadPlayerScorePublic(leaderboardId, timeSpan)
+
+    @UsedByGodot
     fun showLeaderboard(leaderboardId: String) = leaderboardsProxy.showLeaderboard(leaderboardId)
 
     @UsedByGodot

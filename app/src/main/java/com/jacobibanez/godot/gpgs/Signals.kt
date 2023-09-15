@@ -23,6 +23,8 @@ val unlockAchievementFailure = SignalInfo("unlockAchievementFailure")
 // Leaderboards
 val submitScoreSuccess = SignalInfo("submitScoreSuccess")
 val submitScoreFailure = SignalInfo("submitScoreFailure")
+val loadScoreSuccess = SignalInfo("loadScoreSuccess", String::class.java, String::class.java)
+val loadScoreFailure = SignalInfo("loadScoreFailure")
 
 // Friends
 val loadFriendsSuccess = SignalInfo("loadFriendsSuccess", String::class.java)
@@ -48,6 +50,8 @@ fun getSignals(): MutableSet<SignalInfo> {
 
         submitScoreSuccess,
         submitScoreFailure,
+        loadScoreSuccess,
+        loadScoreFailure,
 
         loadFriendsSuccess,
         loadFriendsFailure
